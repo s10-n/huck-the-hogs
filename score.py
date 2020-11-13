@@ -1,4 +1,6 @@
-import roll
+# scoring.py - takes in 2 pig_rolls and determines what they're worth as a combo
+
+import pig_roll
 
 def scoring(roll1, roll2):
     if roll1['name'] == "Oinker":
