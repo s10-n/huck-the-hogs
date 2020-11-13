@@ -1,6 +1,7 @@
 import random
 
-def pig_roll(number):
+def pig_roll():
+    number = random.randint(1,201)
     if number <= 70:
         return {'name':'Sider (no dot)','score':0}
     elif number > 70 and number <= 130:
