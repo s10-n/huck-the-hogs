@@ -1,4 +1,4 @@
-import os, discord,score,roll
+import os, discord,score,roll,random
 from dotenv import load_dotenv
 from discord.ext import commands
 
@@ -42,13 +42,22 @@ async def init_game(ctx):
             turn_continues = True
             while turn_continues:
                 embed_var = discord.Embed(description=f"<@{player_id}>'s turn.")
-                initial_roll = score.scoring(roll.pig_roll(),roll.pig_roll())
-                if initial_roll['name'] == 'Pig Out!':
-                    embed_var.add_field(name=f"{initial_roll['name']}",value=f"{players[player_id]}")
-                    embed_var.set_footer(text='Use !roll to roll again or !pass to move to the next player.')
-                    break
+                initial_roll = score.scoring(roll.pig_roll(random.randint(1,201)),roll.pig_roll(random.randint(1,201)))
+
+                # Player rolls a Pig Out
+                if initial_roll['name'] == 'Pig Out':
+                    embed_var.add_field(name=f"{initial_roll['name']}",value=f"Total score: {players[player_id]} points")
+
+                # Player rolls an Oinker
+                elif initial_roll['name'] == 'Oinker':
+                    players[player_id] = 0
+                    embed_var.add_field(name=f"{initial_roll['name']}",value=f"Total score: {players[player_id]} points")
+
+                 
+                
                 else:
-                    embed_var.add_field(name=f"{initial_roll['name']} (+ {initial_roll['score']} points!)",value=f"{players[player_id]}")
+                    players[player_id] += initial_roll['score']
+                    embed_var.add_field(name=f"{initial_roll['name']} [+ {initial_roll['score']} points!]",value=f"Total score: {players[player_id]} points")
                     embed_var.set_footer(text='Use !roll to roll again or !pass to move to the next player.')
                 await ctx.send(embed=embed_var)
         

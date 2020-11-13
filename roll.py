@@ -12,8 +12,8 @@ def pig_roll():
         return {'name':'Trotter','score':5}
     elif number > 192 and number <= 197:
         return {'name':'Snouter','score':10}
-    elif number > 198 and number <= 199:
-        return {'name':"Makin' Bacon",'score':0}
+    elif number > 197 and number <= 199:
+        return {'name':'Oinker','score':0}
     elif number == 200:
         return {'name':'Jowler','score':15}
         
