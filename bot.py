@@ -90,10 +90,10 @@ async def init_game(ctx):
                     else:
                         player.current_score += initial_roll['score']
                         print(player.current_score)
+                        embed_var.add_field(name=f"{initial_roll['name']} [+ {initial_roll['score']} points]",value=f"Score this turn: {player.current_score} points\nTotal score: {player.total_score + player.current_score} points")
                         if player.current_score + player.total_score >= 100:
-                            embed_var.add_field(name='You win!',value='Use !huckthehogs to play again.')
+                            embed_var.add_field(name='You win!',value='Use !huckthehogs to play again.',inline=False)
                         else:
-                            embed_var.add_field(name=f"{initial_roll['name']} [+ {initial_roll['score']} points!]",value=f"Score this turn: {player.current_score} points\nTotal score: {player.total_score + player.current_score} points")
                             embed_var.set_footer(text='Use !roll to roll again or !pass to move to the next player.')
                     await ctx.send(embed=embed_var)
                     
@@ -107,7 +107,7 @@ async def init_game(ctx):
                     embed_var = discord.Embed()
                     player.is_my_turn = False
                     player.total_score += player.current_score
-                    embed_var.add_field(name=f"Passed!",value=f"Turn score: {player.current_score} points\nTotal score: {player.total_score} points")
+                    embed_var.add_field(name=f"Passed",value=f"Turn score: {player.current_score} points\nTotal score: {player.total_score} points")
                     player.current_score = 0
                     if current_player == (len(players) - 1):
                         current_player = 0
@@ -117,20 +117,21 @@ async def init_game(ctx):
                     embed_var.add_field(name='Next player:',value=f"<@{players[current_player].name}>",inline=False)
                     await ctx.send(embed=embed_var)
 
-
-        # TODO: write score sorting algorithm
         @bot.command(name='score')
         async def show_score(ctx):
-            score_list = {}
+            score_list = []
             for player in players:
-                score_list[player.name] = player.total_score
-            scoreboard_text = ''
-            for score in scores:
-                scoreboard_text += f'<@{score_list[score]}>: {score} points\n'
-            print(scoreboard_text)
+                score_list.append({'name':player.name,'score':player.total_score})
+
+            def get_score(player_score):
+                return player_score.get('score')
+            score_list.sort(key=get_score,reverse=True)           
+
+            scoreboard_text = ''      
+            for player_score in score_list:
+                scoreboard_text += f"<@{player_score['name']}>: {player_score['score']} points\n"
             embed_var = discord.Embed()
             embed_var.add_field(name='Scores:',value=f'{scoreboard_text}')
             await ctx.send(embed=embed_var)
-            
-        
+                    
 bot.run(TOKEN)
