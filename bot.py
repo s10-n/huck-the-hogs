@@ -15,6 +15,8 @@ class Player:
 bot = commands.Bot(command_prefix='!')
 print('Huck the Hogs successfully initiated.')
 
+current_player = 0
+
 # initialize the game
 @bot.command(name='h')
 async def init_game(ctx):
@@ -43,14 +45,17 @@ async def init_game(ctx):
     async def start_game(ctx):
         print('Game started')
         embed_var = discord.Embed(title="Let's huck some hogs!",description=f"<@{players[0].name}> goes first.\n Use !roll to roll the pigs.")
+        global current_player
+        players[current_player].is_my_turn = True
         await ctx.send(embed=embed_var)
 
         @bot.command(name='roll')
         async def player_roll(ctx):
+            global current_player
             # determine that the player who !rolled is actually playing
             roller_ID = format(ctx.author.id)
             for player in players:
-                if player.name == roller_ID:
+                if player.name == roller_ID and player.is_my_turn:
                     #set that player as the current player
                     print(f"{player.name}'s turn.")
                     embed_var = discord.Embed(description=f"<@{player.name}>'s turn.")
@@ -61,23 +66,71 @@ async def init_game(ctx):
                         player.is_my_turn = False
                         player.current_score = 0
                         embed_var.add_field(name=f"{initial_roll['name']}",value=f"Total score: {player.total_score} points")
+                        if current_player == (len(players) - 1):
+                            current_player = 0
+                        else:
+                            current_player += 1
+                        players[current_player].is_my_turn = True
+                        embed_var.add_field(name='Next player:',value=f"<@{players[current_player].name}>",inline=False)
 
                     # Player rolls an Oinker
                     elif initial_roll['name'] == 'Oinker':
                         player.is_my_turn = False
                         player.current_score = 0
                         player.total_score = 0
-                        embed_var.add_field(name=f"{initial_roll['name']}",value=f"Total score: {player.total_score} points")                 
+                        embed_var.add_field(name=f"{initial_roll['name']}",value=f"Total score: {player.total_score} points")
+                        if current_player == (len(players) - 1):
+                            current_player = 0
+                        else:
+                            current_player += 1
+                        players[current_player].is_my_turn = True
+                        embed_var.add_field(name='Next player:',value=f"<@{players[current_player].name}>",inline=False)
 
                     # Player rolls anything else
                     else:
                         player.current_score += initial_roll['score']
-                        embed_var.add_field(name=f"{initial_roll['name']} [+ {initial_roll['score']} points!]",value=f"Score this turn: {player.current_score} points.\nTotal score: {player.total_score + player.current_score} points")
-                        embed_var.set_footer(text='Use !roll to roll again or !pass to move to the next player.')
+                        print(player.current_score)
+                        if player.current_score + player.total_score >= 100:
+                            embed_var.add_field(name='You win!',value='Use !huckthehogs to play again.')
+                        else:
+                            embed_var.add_field(name=f"{initial_roll['name']} [+ {initial_roll['score']} points!]",value=f"Score this turn: {player.current_score} points\nTotal score: {player.total_score + player.current_score} points")
+                            embed_var.set_footer(text='Use !roll to roll again or !pass to move to the next player.')
+                    await ctx.send(embed=embed_var)
+                    
+        @bot.command(name='pass')
+        async def player_pass(ctx):
+            global current_player
+            # determine that the player who !rolled is actually playing
+            roller_ID = format(ctx.author.id)
+            for player in players:
+                if player.name == roller_ID and player.is_my_turn:
+                    embed_var = discord.Embed()
+                    player.is_my_turn = False
+                    player.total_score += player.current_score
+                    embed_var.add_field(name=f"Passed!",value=f"Turn score: {player.current_score} points\nTotal score: {player.total_score} points")
+                    player.current_score = 0
+                    if current_player == (len(players) - 1):
+                        current_player = 0
+                    else:
+                        current_player += 1
+                    players[current_player].is_my_turn = True
+                    embed_var.add_field(name='Next player:',value=f"<@{players[current_player].name}>",inline=False)
                     await ctx.send(embed=embed_var)
 
-              
+
+        # TODO: write score sorting algorithm
+        @bot.command(name='score')
+        async def show_score(ctx):
+            score_list = {}
+            for player in players:
+                score_list[player.name] = player.total_score
+            scoreboard_text = ''
+            for score in scores:
+                scoreboard_text += f'<@{score_list[score]}>: {score} points\n'
+            print(scoreboard_text)
+            embed_var = discord.Embed()
+            embed_var.add_field(name='Scores:',value=f'{scoreboard_text}')
+            await ctx.send(embed=embed_var)
             
         
 bot.run(TOKEN)
-
