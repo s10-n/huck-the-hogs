@@ -108,7 +108,7 @@ async def player_roll(ctx):
     for player in players:
         if player.name == roller_ID and player.is_my_turn:
             #set that player as the current player
-            print(f"{player.name}'s turn.")
+            print(f"{ctx.author}'s turn.")
             embed_var = discord.Embed(description=f"<@{player.name}>'s turn.")
             roll = score.scoring(pig_roll.pig_roll(),pig_roll.pig_roll()) # roll two pigs and return a name and a score for the roll
 
