@@ -23,8 +23,7 @@ game_on = False # is there a game active right now
 players = [] # list of players that have joined as Player objects
 current_player = 0 # the list index of the player whose turn it is
 
-# TODO: adjust to !huckthehogs when complete
-@bot.command(name='h') # initialize the game
+@bot.command(name='huckthehogs') # initialize the game
 async def init_game(ctx):
     global game_initialized
     global game_on
