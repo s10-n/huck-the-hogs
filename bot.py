@@ -1,4 +1,4 @@
-import os,discord.py,score,pig_roll,random,image
+import os,discord,score,pig_roll,random,image
 from dotenv import load_dotenv
 from discord.ext import commands
 
@@ -114,7 +114,7 @@ async def player_roll(ctx):
             
             roll = score.scoring(roll1,roll2) # roll two pigs and return a name and a score for the roll
             image.get_image(roll1,roll2)
-            file = discord.File('Images\\rollimage.png', filename='rollimage.png')
+            file = discord.File('images/rollimage.png', filename='rollimage.png')
             embed_var.set_image(url='attachment://rollimage.png')
             
 
