@@ -1,11 +1,13 @@
 from PIL import Image
-dotsider = Image.open('/home/sean/projects/huck-the-hogs/images/dotsider.png')
-nodotsider = Image.open('/home/sean/projects/huck-the-hogs/images/nodotsider.png')
 
-def get_concat_h(image1, image2):
-    dst = Image.new('RGB', (image1.width + image2.width, image1.height))
-    dst.paste(image1, (0, 0))
-    dst.paste(image2, (image1.width, 0))
-    return dst
-
-get_concat_h(dotsider, nodotsider).save('/home/sean/projects/huck-the-hogs/images/concat.png')
+# takes in two rolls, creates an image
+def get_image(roll1, roll2):
+    if roll1['name'] == "Oinker" or roll2['name'] == "Oinker":
+        roll_image = Image.open('Images\Oinker.png')
+    else:
+        first_roll_image = Image.open('Images\\' + roll1['name'] + '.png')
+        second_roll_image = Image.open('Images\\' + roll2['name'] + '.png')
+        roll_image = Image.new('RGB', (first_roll_image.width + second_roll_image.width, first_roll_image.height))
+        roll_image.paste(first_roll_image, (0, 0), first_roll_image)
+        roll_image.paste(second_roll_image, (first_roll_image.width, 0), second_roll_image)
+    roll_image.save('Images\\rollimage.png')

@@ -1,4 +1,4 @@
-import os,discord,score,pig_roll,random
+import os,discord.py,score,pig_roll,random,image
 from dotenv import load_dotenv
 from discord.ext import commands
 
@@ -109,7 +109,14 @@ async def player_roll(ctx):
             #set that player as the current player
             print(f"{ctx.author}'s turn.")
             embed_var = discord.Embed(description=f"<@{player.name}>'s turn.")
-            roll = score.scoring(pig_roll.pig_roll(),pig_roll.pig_roll()) # roll two pigs and return a name and a score for the roll
+            roll1 = pig_roll.pig_roll()
+            roll2 = pig_roll.pig_roll()
+            
+            roll = score.scoring(roll1,roll2) # roll two pigs and return a name and a score for the roll
+            image.get_image(roll1,roll2)
+            file = discord.File('Images\\rollimage.png', filename='rollimage.png')
+            embed_var.set_image(url='attachment://rollimage.png')
+            
 
             # Player rolls a Pig Out
             if roll['name'] == 'Pig Out':
@@ -165,8 +172,9 @@ async def player_roll(ctx):
                 else:
                     embed_var.add_field(name='\u200b', # prompt the player for their next action
                                         value='Use **!roll** to roll again or **!pass** to move to the next player.',
-                                        inline=False) 
-            await ctx.send(embed=embed_var)
+                                        inline=False)
+            
+            await ctx.send(file=file,embed=embed_var)
 
 # player ends their turn and keeps their score
 @bot.command(name='pass')
