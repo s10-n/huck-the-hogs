@@ -6,7 +6,7 @@ A non-commercial Discord bot version of the dice game Pig, inspired by Pass the 
 ## How to play
 
 Each turn involves the player rolling two hogs, each of which has a dot on one side. 
-The player scores or loses points based on the way the hogs land (see [Scoring](https://github.com/s10-n/huck-the-hogs/new/main?readme=1#scoring) below).
+The player scores or loses points based on the way the hogs land (see [Scoring](#scoring) below).
 The player's turn ends when they either roll a Pig Out (wiping their score for the turn) or an Oinker (wiping their score for the game) or when they pass the hogs to the next player.
 The first player to reach 100 or more points wins.
 
