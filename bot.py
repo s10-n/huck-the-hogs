@@ -18,7 +18,7 @@ print('Huck the Hogs successfully initiated.')
 current_games = {}
 # set game variables to defaults
 
-@bot.command(name='huckthehogs') # initialize the game
+@bot.command(name='huckthehogs',help='Initialize the game') # initialize the game
 async def init_game(ctx):
     print(ctx.message.guild.id)
     current_games[ctx.message.guild.id] = {'game_init':False,
@@ -32,11 +32,11 @@ async def init_game(ctx):
         current_games[ctx.message.guild.id]['players'] = [] # reset the list of players
         print('Game initialized.')
         embed_var = discord.Embed(title='Welcome to Huck the Hogs!',
-                                  description='Use the **!join** command to join the game.\nUse **!quit** at any time to exit the game.')
+                                  description='Use the **!join** command to join the game.\nUse **!quit** at any time to exit the game.\nUse **!help** for a full overview of game commands.')
         await ctx.send(embed=embed_var)
 
 # quit the game
-@bot.command(name='quit')
+@bot.command(name='quit',help="Abandon the server's current game")
 async def quit_game(ctx):
     # reset all game values to the defaults
     current_games[ctx.message.guild.id]['current_player'] = 0 
@@ -47,9 +47,9 @@ async def quit_game(ctx):
     embed_var = discord.Embed(title='Game exited.',
                               description='Thanks for playing!')
     await ctx.send(embed=embed_var)
-    
+   
 # allow players to join the game
-@bot.command(name='join')
+@bot.command(name='join',help="Join the server's current game (game must have been initialized)")
 async def join_game(ctx):
     if current_games[ctx.message.guild.id]['joinable']: # ensure that the game is in the join phase
         user_ID = format(ctx.author.id)
@@ -65,7 +65,7 @@ async def join_game(ctx):
         await ctx.send(embed=embed_var)
 
 # start the game once all players have joined
-@bot.command(name='start')
+@bot.command(name='start',help="Start the server's game and start rolling (requires at least two players)")
 async def start_game(ctx):
     roller_ID = format(ctx.author.id)
     list_of_players = []
@@ -79,12 +79,12 @@ async def start_game(ctx):
             current_games[ctx.message.guild.id]['joinable'] = False # end the joining stage
             print('Game started')
             embed_var = discord.Embed(title="Let's huck some hogs!",
-                                      description=f"<@{current_games[ctx.message.guild.id]['player_list'][0].name}> goes first.\n Use **!roll** to roll the pigs.")
+                                      description=f"<@{current_games[ctx.message.guild.id]['player_list'][0].name}> goes first.\n Use **!roll** to roll the hogs.")
             current_games[ctx.message.guild.id]['player_list'][current_games[ctx.message.guild.id]['current_player']].is_my_turn = True # set the first player to join as the current player
         await ctx.send(embed=embed_var)
 
 # roll the pigs
-@bot.command(name='roll')
+@bot.command(name='roll',help='On your turn, roll the hogs')
 async def player_roll(ctx):
     # determine that the player who !rolled is actually playing
     roller_ID = format(ctx.author.id)
@@ -158,7 +158,7 @@ async def player_roll(ctx):
             await ctx.send(file=file,embed=embed_var)
 
 # player ends their turn and keeps their score
-@bot.command(name='pass')
+@bot.command(name='pass', help='End your turn and keep your score for that turn')
 async def player_pass(ctx):
     # determine that the player who !rolled is actually playing
     roller_ID = format(ctx.author.id)
@@ -182,7 +182,7 @@ async def player_pass(ctx):
             await ctx.send(embed=embed_var)
 
 # show the game's current score
-@bot.command(name='score')
+@bot.command(name='score',help='View all player scores')
 async def show_score(ctx):
     if current_games[ctx.message.guild.id]['game_on']: # check that a game is taking place
         score_list = []
