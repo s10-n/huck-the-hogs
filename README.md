@@ -10,6 +10,22 @@ The player scores or loses points based on the way the hogs land (see [Scoring](
 The player's turn ends when they either roll a Pig Out (wiping their score for the turn) or an Oinker (wiping their score for the game) or when they pass the hogs to the next player.
 The first player to reach 100 or more points wins.
 
+## Commands
+
+**!huckthehogs** - Initialize the game
+
+**!join** - Join the server's current game (game must have been initialized)
+
+**!start** - Start the server's game and start rolling (requires at least two players)
+
+**!roll** - On your turn, roll the hogs
+
+**!pass** - End your turn and keep your score for that turn
+
+**!score** - View all player scores
+
+**!quit** - Abandon the server's current game
+
 ## Scoring
 
 ### Single pig
@@ -34,18 +50,4 @@ Roll | Score
 ![Dot sider](https://raw.githubusercontent.com/s10-n/huck-the-hogs/main/images/Sider%20(dot).png)![No dot sider](https://raw.githubusercontent.com/s10-n/huck-the-hogs/main/images/Sider%20(no%20dot).png)Pig Out (hogs are lying on opposite sides)|Turn score resets to zero and turn ends
 ![Oinker](https://raw.githubusercontent.com/s10-n/huck-the-hogs/main/images/Oinker.png)Oinker (hogs are touching)|Total score resets to zero and turn ends
 
-## Commands
 
-**!huckthehogs** - Initialize the game
-
-**!join** - Join the server's current game (game must have been initialized)
-
-**!start** - Start the server's game and start rolling (requires at least two players)
-
-**!roll** - On your turn, roll the hogs
-
-**!pass** - End your turn and keep your score for that turn
-
-**!score** - View all player scores
-
-**!quit** - Abandon the server's current game
