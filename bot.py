@@ -18,6 +18,11 @@ print('Huck the Hogs successfully initiated.')
 current_games = {}
 # set game variables to defaults
 
+# handle all other commands
+@bot.event
+async def on_command_error(ctx,error):
+    pass
+
 @bot.command(name='huckthehogs',help='Initialize the game') # initialize the game
 async def init_game(ctx):
     print(ctx.message.guild.id)
